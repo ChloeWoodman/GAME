@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width" , initial-scale=1.0">
+<title>Laika</title>
+ <link href="/css/style.css" rel="stylesheet" type="text/css"/>
+    <!--jake edit-->
+    <script type="text/javascript" 
+        src="script1.js">
+    </script>
+    <!--jake edit-->
+
+</head>
+<body>
+
+  <div class="progress-bar-container">
+    <label1 for="progress-bar">Loading Game...</label1>
+    <progress id="progress-bar" value="0" max="100"></progress>
+  </div>
+
+  <script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+  <script type="importmap">  {    "imports": {      "three": "https://unpkg.com/three@0.145.0/build/three.module.js"    }  }
+    </script>
+
+  <script type="module" src="/js/script1.js"></script>
+    <div class="overlay-text">
+      <div>Health:</div>
+      <div>Score: </div>
+      <!--jake edit-->
+        <script type="text/javascript">
+          function f() {
+            var displayScore = score;
+            var str = "Score: " + displayScore;
+              document.getElementById('text').innerHTML = str;
+          }
+        </script>
+      
+      <!--jake edit-->
+      <button id="leftbutton">Left</button>
+      <button id="rightbutton">Right</button>
+      <ul>
+        <button class="button" onlick=<li><a href="/">Main page</a></li>
+      </ul>
+    </div>
+</body>
+</html>
