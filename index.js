@@ -1,7 +1,12 @@
 const express = require('express');
 const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 
+//setup express app
 const app = express();
+
+//lets you use the cookieParser in your application
+app.use(cookieParser());
 
 //form code decode midware
 app.use(express.urlencoded({
@@ -14,18 +19,52 @@ const jsonParser = bodyParser.json(); //declare JSON parser
 //define the static folder for resource
 app.use(express.static('resources/'));
 
+//DEFAULT PAGE +++++++++++++++++++++++++++++++++++
 //default page
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
+  //cookies that have not been signed
+  console.log("Cookies: ", req.cookies);
+
+//COOKIES ++++++++++++++++++++++++++++++++++++++++
+  //cookies that have been signed
+  console.log("Signed Cookies: ", req.signedCookies)
 });
 
+//a get route for adding a cookie
+app.get('/setcookie', (req, res) => {
+    res.cookie(`Cookie token name`,`encrypted cookie string Value`,{
+        maxAge: 5000,
+        // expires works the same as the maxAge
+        expires: new Date('01 12 2023'),
+        secure: true,
+        httpOnly: true,
+        sameSite: 'lax'
+    });
+    res.send('Cookie have been saved successfully');
+});
 
+// get the cookie incoming request
+app.get('/getcookie', (req, res) => {
+    //show the saved cookies
+    console.log(req.cookies)
+    res.send(req.cookies);
+});
+
+// delete the saved cookie
+app.get('/deletecookie', (req, res) => {
+    //show the saved cookies
+    res.clearCookie()
+    res.send('Cookie has been deleted successfully');
+});
+
+//GAME PAGE +++++++++++++++++++++++++++++++++++++++
 //game page
 app.get('/game', (req, res) => {
   res.sendFile(__dirname + '/script1.html');
 });
 
-
+//LOGIN PAGE ++++++++++++++++++++++++++++++++++++++
 //Login page
 app.get('/login', (req, res) => {
   res.sendFile(__dirname + '/Login.html');
@@ -36,6 +75,7 @@ const fs = require("fs");
 
 app.post('/save', jsonParser, (req, res) => {
   let name = req.body.name;
+  let name = req.cookies.username
   let pass = req.body.pass;
   console.log("Input username and password = " + name + 
  pass);
@@ -92,6 +132,7 @@ app.post('/save', jsonParser, (req, res) => {
 
   if ((name == "user1") && (pass == 123)){
     console.log("correct user");
+    res.cookie("username", name);
     return res.json(myJson);
   } else {
     //get the receieved JSON string
@@ -100,17 +141,19 @@ app.post('/save', jsonParser, (req, res) => {
   }
 });
 
+//REGISTER PAGE ++++++++++++++++++++++++++++++++++
 //register page
 app.get('/register', (req, res) => {
   res.sendFile(__dirname + '/register.html');
 });
 
+//404 PAGE +++++++++++++++++++++++++++++++++++++++
 //404 page
 app.get('*', (req, res) => {
   res.status(404).sendFile(__dirname + '/404.html');
 });
 
-
+//PORT +++++++++++++++++++++++++++++++++++++++++++
 app.listen(3000, () => {
   console.log("Server started");
 })

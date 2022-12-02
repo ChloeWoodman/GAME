@@ -161,6 +161,47 @@ const mesh13 = new THREE.Mesh(geometry14, material14);
 mesh13.position.set(0, 0, -10);
 scene.add(mesh13);
 
+//Octahedron Geometry - Stardust 1
+const geometry15 = new THREE.OctahedronGeometry(1, 0);
+const material15 = new THREE.MeshNormalMaterial()
+const stardust1 = new THREE.Mesh(geometry15, material15);
+stardust1.position.set(-5, 0, -17)
+scene.add(stardust1)
+
+//Mini Octahedron Geometry - Stardust 1
+const mgeometry15 = new THREE.OctahedronGeometry(0.5, 0);
+const mmaterial15 = new THREE.MeshNormalMaterial()
+const mstardust1 = new THREE.Mesh(mgeometry15, mmaterial15);
+mstardust1.position.set(-4, 1, -17)
+scene.add(mstardust1)
+
+//Octahedron Geometry - Stardust 2
+const geometry16 = new THREE.OctahedronGeometry(1, 0);
+const material16 = new THREE.MeshNormalMaterial()
+const stardust2 = new THREE.Mesh(geometry16, material16);
+stardust2.position.set(0, 0, -20)
+scene.add(stardust2)
+
+//Mini Octahedron Geometry - Stardust 2
+const mgeometry16 = new THREE.OctahedronGeometry(0.5, 0);
+const mmaterial16 = new THREE.MeshNormalMaterial()
+const mstardust2 = new THREE.Mesh(mgeometry16, mmaterial16);
+mstardust2.position.set(-1, -1, -20)
+scene.add(mstardust2)
+
+//Octahedron Geometry - Stardust 3
+const geometry17 = new THREE.OctahedronGeometry(1, 0);
+const material17 = new THREE.MeshNormalMaterial()
+const stardust3 = new THREE.Mesh(geometry17, material17);
+stardust3.position.set(5, 0, -25)
+scene.add(stardust3)
+
+//Mini Octahedron Geometry - Stardust 3
+const mgeometry17 = new THREE.OctahedronGeometry(0.5, 0);
+const mmaterial17 = new THREE.MeshNormalMaterial()
+const mstardust3 = new THREE.Mesh(mgeometry17, mmaterial17);
+mstardust3.position.set(6, 1, -25)
+scene.add(mstardust3)
 
 //GLTF loading PLAYER
 const gltfLoader = new GLTFLoader(manager);
@@ -254,6 +295,24 @@ mesh12.rotation.z -= 0.01;
 aGroupSample.add(mesh13, mesh12);
 scene.add(aGroupSample); //add this group to scene (not the individual mesh!)
 
+const starGroup1 = new THREE.Group();
+stardust1.rotation.x += 0.01;
+mstardust1.rotation.x -= 0.01;
+starGroup1.add(stardust1, mstardust1);
+scene.add(starGroup1);
+
+const starGroup2 = new THREE.Group();
+stardust2.rotation.x += 0.01;
+mstardust2.rotation.x -= 0.01;
+starGroup2.add(stardust2, mstardust2);
+scene.add(starGroup2);
+
+const starGroup3 = new THREE.Group();
+stardust3.rotation.x += 0.01;
+mstardust3.rotation.x -= 0.01;
+starGroup3.add(stardust3, mstardust3);
+scene.add(starGroup3);
+
 
 //CAMERA ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -308,6 +367,17 @@ const animate = function() {
     circle3.rotation.y += 0.01;
     circle3.position.z += diffcultySpeed;
 
+    //rotates stardust and brings forward
+    stardust1.rotation.x += 0.01;
+    mstardust1.rotation.x -= 0.01;
+    starGroup1.position.z += diffcultySpeed;
+    stardust2.rotation.x += 0.01;
+    mstardust2.rotation.x -= 0.01;
+    starGroup2.position.z += diffcultySpeed;
+    stardust3.rotation.x += 0.01;
+    mstardust3.rotation.x -= 0.01;
+    starGroup3.position.z += diffcultySpeed;
+
     //brings rings forward
     mesh12.position.z += 0.1;
     mesh13.position.z += 0.1;
@@ -359,7 +429,6 @@ const animate = function() {
     renderer.render(scene, camera);
 
     //RESPAWN ASTEROIDS
-
     if (circle.position.z >= 5) {
       circle.position.z = -17;
     }
@@ -368,6 +437,17 @@ const animate = function() {
     }
     if (circle3.position.z >= 5) {
       circle3.position.z = -35;
+    }
+
+    //RESPAWN STARDUST
+    if (starGroup1.position.z >= 20) {
+      starGroup1.position.z = -17;
+    }
+    if (starGroup2.position.z >= 30) {
+      starGroup2.position.z = -20;
+    }
+    if (starGroup3.position.z >= 40) {
+      starGroup3.position.z = -25;
     }
   }
 };
