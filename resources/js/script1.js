@@ -15,7 +15,7 @@ let score = 1;
 let health = document.getElementById("health");
 //let hurt = false;
 //let healthTimer = 0;
-var travelSpeed = 0.06;
+var diffcultySpeed = 0.06;
 
 //NEW SCENE ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -300,13 +300,13 @@ const animate = function() {
     //rotates circle and brings forward
     circle.rotation.x += 0.01;
     circle.rotation.y += 0.01;
-    circle.position.z += travelSpeed;
+    circle.position.z += diffcultySpeed;
     circle2.rotation.x += 0.01;
     circle2.rotation.y += 0.01;
-    circle2.position.z += travelSpeed;
+    circle2.position.z += diffcultySpeed;
     circle3.rotation.x += 0.01;
     circle3.rotation.y += 0.01;
-    circle3.position.z += travelSpeed;
+    circle3.position.z += diffcultySpeed;
 
     //brings rings forward
     mesh12.position.z += 0.1;
@@ -432,8 +432,8 @@ document.getElementById("rightbutton").addEventListener("click", moveright);
 //DIFFICULTY INCREASE ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 function increaseSpeed() {
-  if (score >= 5000) {
-    travelSpeed += 0.000005;
+  if (score >= 1000) {
+    diffcultySpeed += 0.0001;
   }
 }
 
