@@ -30,6 +30,16 @@ The folder structure:
 ---user.json stores user submit data in a JSON format. 
 
 
+Coding comventions used:
+* Simple statement ends in semicolon
+* Complex statement will not end in semicolon
+* Opening bracket at the end of first line
+* Using one space before opening bracket
+* Lines are short in length, < 80 char
+* camelCase hyphens
+* Lower case file names
+
+
 REFERENCES: 
 earthgif.gif for html main page is from NASA
 galaxy.png is from https://www.pngall.com/galaxy-png/download/14481

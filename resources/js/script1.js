@@ -4,32 +4,31 @@ import { GLTFLoader } from 'https://unpkg.com/three@0.145.0/examples/jsm/loaders
 //import { OBB } from 'https://unpkg.com/three@0.145.0/examples/jsm/math/OBB.js';
 
 
+//VARIABLES ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 let controls; //This variable is used for orbit control
 let leftstate = false; //variable for leftstate for left button movement
 let rightstate = false; //variable for rightstate for right button movement
 let leftPressed = false; //arrow controls left
 let rightPressed = false; //arrow controls right
 let score = 1;
-let health = 3;
-let hurt = false;
+let health = document.getElementById("health");
+//let hurt = false;
+//let healthTimer = 0;
+var travelSpeed = 0.06;
 
-//new scene
+//NEW SCENE ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000); //perspective camera
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-//login details
-function report() {
-
-  var name = document.getElementById("uname").value;
-  alert(name);
-}
-
 let assetLoader = false;
 
-//loading manager
+//LOADING MANAGER ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 const manager = new THREE.LoadingManager();
 manager.onStart = function(url, itemsLoaded, itemsTotal) {
 
@@ -64,7 +63,8 @@ manager.onError = function(url) {
 
 };
 
-//audio
+//AUDIO LOADER +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 // create an AudioListener and add it to the camera
 const listener = new THREE.AudioListener();
 camera.add(listener);
@@ -81,30 +81,19 @@ audioLoader.load('/audio/LaikaBGAudio.mp3', function(buffer) {
   sound.play();
 });
 
+//LIGHTING +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-//first geometry - circle asteroid
-const geometry = new THREE.SphereGeometry();
-const material = new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load("/textures/asteroidtexture.png") });
-const circle = new THREE.Mesh(geometry, material);
-circle.position.set(0, 0, -17);
-scene.add(circle);
+//ambient light
+const light = new THREE.AmbientLight(0xFFFFFF); // soft white light
+scene.add(light);
 
-//second geometry - circle asteroid
-const geometry2 = new THREE.SphereGeometry();
-const material2 = new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load("/textures/asteroidtexture.png") });
-const circle2 = new THREE.Mesh(geometry2, material2);
-circle2.position.set(5, 0, -25);
-scene.add(circle2);
+// lavender coloured directional light at 70% intensity shining from the top.
+const directionalLight = new THREE.DirectionalLight(0xE6E6FA, 0.7);
+scene.add(directionalLight);
+const object = THREE.Object3D;
+let scene12 = new THREE.Object3D;
 
-//third geometry - circle asteroid
-const geometry12 = new THREE.SphereGeometry();
-const material12 = new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load("/textures/asteroidtexture.png") });
-const circle3 = new THREE.Mesh(geometry12, material12);
-circle3.position.set(-5, 0, -35);
-scene.add(circle3);
-
-
-
+//ADD POINTS INTO GAME +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //add points
 const vertices = [];
@@ -119,6 +108,77 @@ for (let i = 0; i < 1000; i++) {
   vertices.push(x, y, z);
 
 }
+
+
+//GEOMETRYS ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+//first geometry - circle asteroid
+const geometry = new THREE.SphereGeometry();
+const material = new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load("/textures/asteroidtexture.png") });
+const circle = new THREE.Mesh(geometry, material);
+circle.position.set(0, 0, -17);
+scene.add(circle);
+
+//bounding sphere 1
+let circle1BB = new THREE.Sphere(circle.position);
+console.log(circle1BB);
+
+
+//second geometry - circle asteroid
+const geometry2 = new THREE.SphereGeometry();
+const material2 = new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load("/textures/asteroidtexture.png") });
+const circle2 = new THREE.Mesh(geometry2, material2);
+circle2.position.set(5, 0, -25);
+scene.add(circle2);
+
+//bounding sphere 2
+let circle2BB = new THREE.Sphere(circle2.position);
+console.log(circle2BB);
+
+
+//third geometry - circle asteroid
+const geometry12 = new THREE.SphereGeometry();
+const material12 = new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load("/textures/asteroidtexture.png") });
+const circle3 = new THREE.Mesh(geometry12, material12);
+circle3.position.set(-5, 0, -35);
+scene.add(circle3);
+
+//bounding sphere 3
+let circle3BB = new THREE.Sphere(circle3.position);
+console.log(circle3BB);
+
+//ring geometry 
+const geometry13 = new THREE.RingGeometry(5, 10, 8);
+const material13 = new THREE.MeshPhongMaterial({ color: 0x00ffd5, side: THREE.DoubleSide, shininess: 100 });
+const mesh12 = new THREE.Mesh(geometry13, material13);
+mesh12.position.set(0, 0, -10);
+scene.add(mesh12);
+
+//ring geometry 2
+const geometry14 = new THREE.RingGeometry(1, 4.5, 8);
+const material14 = new THREE.MeshPhongMaterial({ color: 0xff0000, side: THREE.DoubleSide, shininess: 2 });
+const mesh13 = new THREE.Mesh(geometry14, material14);
+mesh13.position.set(0, 0, -10);
+scene.add(mesh13);
+
+
+//GLTF loading PLAYER
+const gltfLoader = new GLTFLoader(manager);
+
+gltfLoader.load(
+  // resource URL
+  '/models/laikarocket2.glb',
+  // called when the resource is loaded
+  function(gltf) {
+    scene12 = gltf.scene;
+    scene.add(scene12);
+  });
+
+//bounding box 1
+let LaikaBB = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
+LaikaBB.setFromObject(scene12);
+console.log(LaikaBB);
+
 
 //point geometry
 const geometry3 = new THREE.BufferGeometry();
@@ -138,93 +198,53 @@ const material4 = new THREE.PointsMaterial({ map: texture, color: 0x888888, size
 const points2 = new THREE.Points(geometry3, material4);
 scene.add(points2);
 
-//GLTF loading
-const gltfLoader = new GLTFLoader(manager);
 
-gltfLoader.load(
-  // resource URL
-  '/models/laikarocket2.glb',
-  // called when the resource is loaded
-  function(gltf) {
-    scene12 = gltf.scene;
-    scene.add(scene12);
+//COLLISIONS ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-  });
-//const laika = scene12;
-
-//stardust
-const gltfLoader2 = new GLTFLoader(manager);
-gltfLoader2.load(
-  // resource URL
-  '/models/star.glb',
-  // called when the resource is loaded
-  function(gltf) {
-    //gltf.scene13.position.set(0,0,-12);
-    //scene13 = gltf.scene;
-    scene.add(gltf.scene13);
-
-    gltf.animations; // Array<THREE.AnimationClip>
-    gltf.scene; // THREE.Group
-    gltf.scenes; // Array<THREE.Group>
-    gltf.cameras; // Array<THREE.Camera>
-    gltf.asset; // Object
-
-  });
-
-
-
-
-
-
-
-//ring geometry loader for loading screen
-const geometry13 = new THREE.RingGeometry(5, 10, 8);
-const material13 = new THREE.MeshPhongMaterial({ color: 0x00ffd5, side: THREE.DoubleSide, shininess: 100 });
-const mesh12 = new THREE.Mesh(geometry13, material13);
-mesh12.position.set(0, 0, -10);
-scene.add(mesh12);
-
-//ring geometry 2 loader for loading screen
-const geometry14 = new THREE.RingGeometry(1, 4.5, 8);
-const material14 = new THREE.MeshPhongMaterial({ color: 0xff0000, side: THREE.DoubleSide, shininess: 2 });
-const mesh13 = new THREE.Mesh(geometry14, material14);
-mesh13.position.set(0, 0, -10);
-scene.add(mesh13);
-
-//ambient light
-const light = new THREE.AmbientLight(0xFFFFFF); // soft white light
-scene.add(light);
-
-// lavender coloured directional light at 70% intensity shining from the top.
-const directionalLight = new THREE.DirectionalLight(0xE6E6FA, 0.7);
-scene.add(directionalLight);
-const object = THREE.Object3D;
-let scene12 = new THREE.Object3D;
-
-
-//EDIT - Collision ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-/*
-
-const pbox = new THREE.Box3().setFromObject(scene12);
-scene12.geometry.obb = new OBB().fromBox3(scene12)
-scene12.userData.obb = new OBB();
-
-const abox1 = new THREE.Box3().setFromObject(circle);
-circle.geometry.obb = new OBB().fromBox3(abox1)
-circle.userData.obb = new OBB();
-
-const abox2 = new THREE.Box3().setFromObject(circle2);
-circle2.geometry.obb = new OBB().fromBox3(abox2)
-circle2.userData.obb = new OBB();
-
-const abox3 = new THREE.Box3().setFromObject(circle3);
-circle3.geometry.obb = new OBB().fromBox3(abox3)
-circle3.userData.obb = new OBB();
+/* function checkCollisions() {
+  
+  //intersecting TOUCHING test
+  if (LaikaOBB.intersectsSphere(circle1BB)) {
+    animation1();
+  } else {
+    circle.material.opacity = 1.0;
+  }
+    if (LaikaOBB.intersectsSphere(circle2BB)) {
+    animation2();
+  } else {
+    circle2.material.opacity = 1.0;
+  }
+  if (LaikaOBB.intersectsSphere(circle3BB)) {
+    animation3();
+  } else {
+    circle3.material.opacity = 1.0;
+  }
+}
 */
 
+//ASTEROID COLLISION ANIMATION +++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+//animations for asteroids when collided with
+    function animation1(){
+      circle.material.transparent = true;
+      circle.material.opacity = 0.5;
+      circle.material.color = new THREE.Color(Math.random() * 0xffffff)
+    }
+    
+    function animation2(){
+      circle2.material.transparent = true;
+      circle2.material.opacity = 0.5;
+      circle2.material.color = new THREE.Color(Math.random() * 0xffffff)
+    }
+    
+    function animation3(){
+      circle3.material.transparent = true;
+      circle3.material.opacity = 0.5;
+      circle3.material.color = new THREE.Color(Math.random() * 0xffffff)
+    }
+    
 
+//MAKES GROUP ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //add as a group 
 //similar to Object3D, used to make working with groups of objects syntactically clearer
@@ -234,14 +254,14 @@ mesh12.rotation.z -= 0.01;
 aGroupSample.add(mesh13, mesh12);
 scene.add(aGroupSample); //add this group to scene (not the individual mesh!)
 
-const group = new THREE.Group();
-group.add(circle, circle2, circle3);
-scene.add(group);
-//end of add group
+
+//CAMERA ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //camera position
 camera.position.z = 5;
 camera.position.y = 5;
+
+//ANIMATE ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //animate
 const animate = function() {
@@ -254,39 +274,21 @@ const animate = function() {
     camera.position.z = scene12.position.z + 6;
 
 
-    /*
-    //EDIT - Collision assignment +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    laika.userData.obb.copy(laika.geometry.obb)
-    circle.userData.obb.copy(circle.geometry.obb)
-    circle2.userData.obb.copy(circle2.geometry.obb)
-    circle3.userData.obb.copy(circle3.geometry.obb)
-
-    laika.userData.obb.applyMatrix4(laika.matrixWorld)
-    circle.userData.obb.applyMatrix4(circle.matrixWorld)
-    circle2.userData.obb.applyMatrix4(circle2.matrixWorld)
-    circle3.userData.obb.applyMatrix4(circle3.matrixWorld)
-    
-    */
-
-
     //x axis border
     if (scene12.position.x <= -10) {
       rightPressed = false;
       rightstate = false;
-      console.log("Reached right border")
+      console.log("Reached right border");
     }
     else if (scene12.position.x >= 10) {
       leftPressed = false;
       leftstate = false;
-      console.log("Reached left border")
+      console.log("Reached left border");
     }
 
-    //reset mesh after passing past camera 
-    //if (group.position.x > camera.position.x)     {
-    //group.position.reset();
-    //}
 
-  }, 1000 / 60); //60 fps frame rate, 1 second = 1000 milliseconds, / 60 so 60 frames in 1000 milliseconds 
+  }, 1000 / 60); 
+  // ^ 60 fps frame rate, 1 second = 1000 milliseconds, / 60 so 60 frames in 1000 milliseconds 
 
   if (assetLoader) {
     //do animate here
@@ -298,11 +300,13 @@ const animate = function() {
     //rotates circle and brings forward
     circle.rotation.x += 0.01;
     circle.rotation.y += 0.01;
+    circle.position.z += travelSpeed;
     circle2.rotation.x += 0.01;
     circle2.rotation.y += 0.01;
+    circle2.position.z += travelSpeed;
     circle3.rotation.x += 0.01;
     circle3.rotation.y += 0.01;
-    group.position.z += 0.06;
+    circle3.position.z += travelSpeed;
 
     //brings rings forward
     mesh12.position.z += 0.1;
@@ -325,30 +329,50 @@ const animate = function() {
       scene12.position.x -= 0.1;
     }
 
-    /*
-    //EDIT - Collision Check ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    if (circle.userData.obb.intersectsOBB(laika.userData.obb)){
-      health -= 1;
-      hurt = true;
-      var healthTimer = 60;
-    }
-
-    //EDIT - invincibility frames++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    if (healthTimer >= 1){
-      healthTimer -= 1;
-    }
-    else {
-      hurt = false;
-    }
-    */
-
+    //score
     score++;
+    document.getElementById("score").innerHTML = score;
 
-    //document.getElementById("score").innerHTML = score;
+    
+    //keeps bounding box updated with movement
+    /*LaikaBB.copy(scene12.geometry.boundingBox).applyMatrix4(scene12.matrixWorld);
+    console.log(LaikaBB);
+    
+    //circle 1 bounding sphere updated with movement
+    circle1BB.copy(circle.geometry.boundingSphere).applyMatrix4(circle.matrixWorld);
+    console.log(circle1BB)
+    //circle 2 bounding sphere updated with movement
+    circle2BB.copy(circle2.geometry.boundingSphere).applyMatrix4(circle2.matrixWorld);
+    console.log(circle2BB)
+    //circle 3 bounding sphere updated with movement
+    circle2BB.copy(circle3.geometry.boundingSphere).applyMatrix4(circle3.matrixWorld);
+    console.log(circle3BB)*/
 
+    
+    //function to check for collisions
+    //checkCollisions();
+
+    //increase speed function
+    increaseSpeed();
+        
+    //rendering scene and camera
     renderer.render(scene, camera);
+
+    //RESPAWN ASTEROIDS
+
+    if (circle.position.z >= 5) {
+      circle.position.z = -17;
+    }
+    if (circle2.position.z >= 5) {
+      circle2.position.z = -25;
+    }
+    if (circle3.position.z >= 5) {
+      circle3.position.z = -35;
+    }
   }
 };
+
+//ARROW CONTROLS +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //arrow controls
 const keyDownHandler = (event) => {
@@ -368,9 +392,12 @@ const keyUpHandler = (event) => {
   }
 }
 
+
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 
+
+//WINDOW RESIZER +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //Resize window 
 function onWindowResize() {
@@ -402,10 +429,17 @@ const moveright = () => {
 document.getElementById("leftbutton").addEventListener("click", moveleft);
 document.getElementById("rightbutton").addEventListener("click", moveright);
 
+//DIFFICULTY INCREASE ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-/**
-*Create orbit control main function
-*/
+function increaseSpeed() {
+  if (score >= 5000) {
+    travelSpeed += 0.000005;
+  }
+}
+
+
+//ORBIT CONTROL +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 //orbit controls allow camera to orbit around center of surround field
 const createControls = () => {
   //initialise orbit control
@@ -416,5 +450,8 @@ const createControls = () => {
 }
 //use the control function
 createControls();
+
+
+
 //we animate at the bottom because code works from top bottom, making rendering last so user doesnt wait too long
 animate();
