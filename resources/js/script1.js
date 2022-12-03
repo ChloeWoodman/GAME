@@ -11,8 +11,10 @@ let leftstate = false; //variable for leftstate for left button movement
 let rightstate = false; //variable for rightstate for right button movement
 let leftPressed = false; //arrow controls left
 let rightPressed = false; //arrow controls right
-let score = 1;
-let health = document.getElementById("health");
+var score = 1;
+var scoreName = document.getElementById("score");
+var health = 3;
+var healthName = document.getElementById("health")
 //let hurt = false;
 //let healthTimer = 0;
 var diffcultySpeed = 0.06;
@@ -119,9 +121,9 @@ const circle = new THREE.Mesh(geometry, material);
 circle.position.set(0, 0, -17);
 scene.add(circle);
 
-//bounding sphere 1
-let circle1BB = new THREE.Sphere(circle.position);
-console.log(circle1BB);
+//bounding sbox asteroid 1
+let circle1BB = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
+circle1BB.setFromObject(circle);
 
 
 //second geometry - circle asteroid
@@ -131,10 +133,9 @@ const circle2 = new THREE.Mesh(geometry2, material2);
 circle2.position.set(5, 0, -25);
 scene.add(circle2);
 
-//bounding sphere 2
-let circle2BB = new THREE.Sphere(circle2.position);
-console.log(circle2BB);
-
+//bounding box asteroid 2
+let circle2BB = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
+circle2BB.setFromObject( circle2 );
 
 //third geometry - circle asteroid
 const geometry12 = new THREE.SphereGeometry();
@@ -143,9 +144,9 @@ const circle3 = new THREE.Mesh(geometry12, material12);
 circle3.position.set(-5, 0, -35);
 scene.add(circle3);
 
-//bounding sphere 3
-let circle3BB = new THREE.Sphere(circle3.position);
-console.log(circle3BB);
+//bounding box asteroid 3
+let circle3BB = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
+circle3BB.setFromObject( circle3 );
 
 //ring geometry 
 const geometry13 = new THREE.RingGeometry(5, 10, 8);
@@ -175,6 +176,10 @@ const mstardust1 = new THREE.Mesh(mgeometry15, mmaterial15);
 mstardust1.position.set(-4, 1, -17)
 scene.add(mstardust1)
 
+//bounding box for stardust
+let starBB1 = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
+starBB1.setFromObject( stardust1 );
+
 //Octahedron Geometry - Stardust 2
 const geometry16 = new THREE.OctahedronGeometry(1, 0);
 const material16 = new THREE.MeshNormalMaterial()
@@ -188,6 +193,10 @@ const mmaterial16 = new THREE.MeshNormalMaterial()
 const mstardust2 = new THREE.Mesh(mgeometry16, mmaterial16);
 mstardust2.position.set(-1, -1, -20)
 scene.add(mstardust2)
+
+//bounding box for stardust 2
+let starBB2 = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
+starBB2.setFromObject( stardust2 );
 
 //Octahedron Geometry - Stardust 3
 const geometry17 = new THREE.OctahedronGeometry(1, 0);
@@ -203,6 +212,10 @@ const mstardust3 = new THREE.Mesh(mgeometry17, mmaterial17);
 mstardust3.position.set(6, 1, -25)
 scene.add(mstardust3)
 
+//bounding box for stardust 3
+let starBB3 = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
+starBB3.setFromObject( stardust3 );
+
 //GLTF loading PLAYER
 const gltfLoader = new GLTFLoader(manager);
 
@@ -214,11 +227,16 @@ gltfLoader.load(
     scene12 = gltf.scene;
     scene.add(scene12);
   });
+//transparent geometry for Laika bounding box
+const geometry18 = new THREE.BoxGeometry( 2, 1.2, 3 );
+const material18 =  new THREE.MeshLambertMaterial({transparent: true, opacity: 0})
+const tCube1 = new THREE.Mesh( geometry18, material18);
+tCube1.position.set(0, 0, -1);
+scene.add( tCube1 );
 
 //bounding box 1
 let LaikaBB = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
-LaikaBB.setFromObject(scene12);
-console.log(LaikaBB);
+LaikaBB.setFromObject( tCube1 );
 
 
 //point geometry
@@ -229,7 +247,7 @@ geometry3.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3)
 const textureloader = new THREE.TextureLoader(manager);
 //setting a texture and size
 let texture = textureloader.load("/textures/planet.png");
-const material3 = new THREE.PointsMaterial({ map: texture, size: 3 })
+const material3 = new THREE.PointsMaterial({ map: texture, size: 3 });
 
 //setting texture 2 and size
 texture = textureloader.load("/textures/galaxy.png");
@@ -241,49 +259,84 @@ scene.add(points2);
 
 
 //COLLISIONS ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-/* function checkCollisions() {
-  
-  //intersecting TOUCHING test
-  if (LaikaOBB.intersectsSphere(circle1BB)) {
-    animation1();
-  } else {
-    circle.material.opacity = 1.0;
-  }
-    if (LaikaOBB.intersectsSphere(circle2BB)) {
-    animation2();
-  } else {
-    circle2.material.opacity = 1.0;
-  }
-  if (LaikaOBB.intersectsSphere(circle3BB)) {
-    animation3();
-  } else {
-    circle3.material.opacity = 1.0;
+var getScore = true;
+function checkCollisions() {
+  if (getScore == true) {
+    //intersecting TOUCHING test
+    if (LaikaBB.intersectsBox(circle1BB)) {
+      animation1();
+      health -= 1;
+      healthName.innerHTML = health;
+      circle.position.z = -40;
+      circle.position.x = -10 + getRandomInt(20);
+    } else {
+      circle.material.opacity = 1.0;
+    }
+      if (LaikaBB.intersectsBox(circle2BB)) {
+      animation2();
+      health -= 1;
+      healthName.innerHTML = health;
+      circle2.position.z = -40;
+      circle2.position.x = -10 + getRandomInt(20);
+    } else {
+      circle2.material.opacity = 1.0;
+    }
+    if (LaikaBB.intersectsBox(circle3BB)) {
+      animation3();
+      health -= 1;
+      healthName.innerHTML = health;
+      circle3.position.z = -40;
+      circle3.position.x = -10 + getRandomInt(20);
+    } else {
+      circle3.material.opacity = 1.0;
+    }
+    if (LaikaBB.intersectsBox(starBB1)) {
+      score += 1;
+      scoreName.innerHTML = score;
+      starGroup1.position.z = -17;
+    }
+    if (LaikaBB.intersectsBox(starBB2)) {
+      score += 1;
+      scoreName.innerHTML = score;
+      starGroup2.position.z = -20;
+    }
+    if (LaikaBB.intersectsBox(starBB3)) {
+      score += 1;
+      scoreName.innerHTML = score;
+      starGroup3.position.z = -25;
+    }
   }
 }
-*/
+
+
 
 //ASTEROID COLLISION ANIMATION +++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //animations for asteroids when collided with
-    function animation1(){
-      circle.material.transparent = true;
-      circle.material.opacity = 0.5;
-      circle.material.color = new THREE.Color(Math.random() * 0xffffff)
-    }
+function animation1(){
+  circle.material.transparent = true;
+  circle.material.opacity = 0.5;
+  circle.material.color = new THREE.Color(Math.random() * 0xffffff)
+}
+
+function animation2(){
+  circle2.material.transparent = true;
+  circle2.material.opacity = 0.5;
+  circle2.material.color = new THREE.Color(Math.random() * 0xffffff)
+}
+
+function animation3(){
+  circle3.material.transparent = true;
+  circle3.material.opacity = 0.5;
+  circle3.material.color = new THREE.Color(Math.random() * 0xffffff)
+}
     
-    function animation2(){
-      circle2.material.transparent = true;
-      circle2.material.opacity = 0.5;
-      circle2.material.color = new THREE.Color(Math.random() * 0xffffff)
-    }
-    
-    function animation3(){
-      circle3.material.transparent = true;
-      circle3.material.opacity = 0.5;
-      circle3.material.color = new THREE.Color(Math.random() * 0xffffff)
-    }
-    
+
+//randomplacement
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+
 
 //MAKES GROUP ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -328,24 +381,21 @@ const animate = function() {
   setTimeout(function() {
 
     requestAnimationFrame(animate);
-    //makes camera follow cube
+    //makes camera follow Laika
     camera.position.x = scene12.position.x;
     camera.position.z = scene12.position.z + 6;
 
-
     //x axis border
-    if (scene12.position.x <= -10) {
+    if ((scene12.position.x)&&(tCube1.position.x) <= -10) {
       rightPressed = false;
       rightstate = false;
       console.log("Reached right border");
     }
-    else if (scene12.position.x >= 10) {
+    else if ((scene12.position.x)&&(tCube1.position.x) >= 10) {
       leftPressed = false;
       leftstate = false;
       console.log("Reached left border");
-    }
-
-
+    }           
   }, 1000 / 60); 
   // ^ 60 fps frame rate, 1 second = 1000 milliseconds, / 60 so 60 frames in 1000 milliseconds 
 
@@ -385,58 +435,70 @@ const animate = function() {
     //makes rocket model positioned
     scene12.rotation.x = 1;
     scene12.rotation.z = 3.1;
+    tCube1.rotation.x = -0.25;
+    tCube1.position.y = -1;
+    
 
     //add up state update animation
     if (leftstate) {
       scene12.position.x += 0.05;
+      tCube1.position.x += 0.05;
 
     } else if (rightstate) {
       scene12.position.x -= 0.05;
+      tCube1.position.x -= 0.05;
     }
     if (leftPressed) {
       scene12.position.x += 0.1;
+      tCube1.position.x += 0.1;
     } else if (rightPressed) {
       scene12.position.x -= 0.1;
+      tCube1.position.x -= 0.1;
     }
-
-    //score
-    score++;
-    document.getElementById("score").innerHTML = score;
 
     
     //keeps bounding box updated with movement
-    /*LaikaBB.copy(scene12.geometry.boundingBox).applyMatrix4(scene12.matrixWorld);
-    console.log(LaikaBB);
+    LaikaBB.copy(tCube1.geometry.boundingBox).applyMatrix4(tCube1.matrixWorld);
     
-    //circle 1 bounding sphere updated with movement
-    circle1BB.copy(circle.geometry.boundingSphere).applyMatrix4(circle.matrixWorld);
-    console.log(circle1BB)
-    //circle 2 bounding sphere updated with movement
-    circle2BB.copy(circle2.geometry.boundingSphere).applyMatrix4(circle2.matrixWorld);
-    console.log(circle2BB)
-    //circle 3 bounding sphere updated with movement
-    circle2BB.copy(circle3.geometry.boundingSphere).applyMatrix4(circle3.matrixWorld);
-    console.log(circle3BB)*/
+    //circle 1 bounding box updated with movement
+    circle1BB.copy(circle.geometry.boundingBox).applyMatrix4(circle.matrixWorld);
+    //circle 2 bounding box updated with movement
+    circle2BB.copy(circle2.geometry.boundingBox).applyMatrix4(circle2.matrixWorld);
+    //circle 3 bounding box updated with movement
+    circle3BB.copy(circle3.geometry.boundingBox).applyMatrix4(circle3.matrixWorld);
+
+    //stardust1 bounding box updated with movemenet
+    starBB1.copy(stardust1.geometry.boundingBox).applyMatrix4(stardust1.matrixWorld);
+    //stardust2 bounding box updated with movemenet
+    starBB2.copy(stardust2.geometry.boundingBox).applyMatrix4(stardust2.matrixWorld);
+    //stardust3 bounding box updated with movemenet
+    starBB3.copy(stardust3.geometry.boundingBox).applyMatrix4(stardust3.matrixWorld);
 
     
     //function to check for collisions
-    //checkCollisions();
+    checkCollisions();
 
     //increase speed function
     increaseSpeed();
-        
+
+    //function for game over
+    gameOver();
+    
     //rendering scene and camera
     renderer.render(scene, camera);
 
     //RESPAWN ASTEROIDS
     if (circle.position.z >= 5) {
-      circle.position.z = -17;
+      circle.position.z = -40;
+      circle.position.x = -10 + getRandomInt(20);
     }
     if (circle2.position.z >= 5) {
-      circle2.position.z = -25;
+      circle2.position.z = -40;
+      circle2.position.x = -10 + getRandomInt(20);
     }
     if (circle3.position.z >= 5) {
-      circle3.position.z = -35;
+      circle3.position.z = -40;
+      circle3.position.x = -10 + getRandomInt(20);
     }
 
     //RESPAWN STARDUST
@@ -471,7 +533,6 @@ const keyUpHandler = (event) => {
     rightPressed = false;
   }
 }
-
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
@@ -512,11 +573,27 @@ document.getElementById("rightbutton").addEventListener("click", moveright);
 //DIFFICULTY INCREASE ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 function increaseSpeed() {
-  if (score >= 1000) {
+  if (score >= 5) {
     diffcultySpeed += 0.0001;
   }
 }
 
+
+//GAME OVER ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+var gameOverTitle = document.getElementById("gameOverTitle");
+var gameOverSummary = document.getElementById("gameOverScore");
+
+function gameOver() {
+  if (health <= 0)
+  {
+    scene.remove(circle, circle2, circle3, scene12, tCube1);
+    getScore = false;
+    gameOverTitle.innerText = "Game Over";
+    gameOverScore.innerText = "Good job! Your score was " + score;
+    healthName.innerText = "";
+    scoreName.innerText = "";
+  }
+}
 
 //ORBIT CONTROL +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -528,10 +605,9 @@ const createControls = () => {
   //controls.update() must be called after any manual changes to the camera's transform
   controls.update();
 }
+
 //use the control function
 createControls();
-
-
 
 //we animate at the bottom because code works from top bottom, making rendering last so user doesnt wait too long
 animate();

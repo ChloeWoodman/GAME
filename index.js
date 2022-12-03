@@ -75,7 +75,6 @@ const fs = require("fs");
 
 app.post('/save', jsonParser, (req, res) => {
   let name = req.body.name;
-  let name = req.cookies.username
   let pass = req.body.pass;
   console.log("Input username and password = " + name + 
  pass);
@@ -132,8 +131,9 @@ app.post('/save', jsonParser, (req, res) => {
 
   if ((name == "user1") && (pass == 123)){
     console.log("correct user");
-    res.cookie("username", name);
+    //res.redirect("/Score.html");
     return res.json(myJson);
+
   } else {
     //get the receieved JSON string
     myJson = { error: true, data: "Wrong user name" };
@@ -145,6 +145,11 @@ app.post('/save', jsonParser, (req, res) => {
 //register page
 app.get('/register', (req, res) => {
   res.sendFile(__dirname + '/register.html');
+});
+
+//SCORE PAGE ++++++++++++++++++++++++++++++++++++++++
+app.get('/score', (req, res) => {
+  res.sendFile(__dirname + '/Score.html');
 });
 
 //404 PAGE +++++++++++++++++++++++++++++++++++++++
