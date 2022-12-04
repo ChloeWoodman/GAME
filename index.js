@@ -1,23 +1,72 @@
 const express = require('express');
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const socketio = require('socket.io');
+const http = require('http');
 
-//setup express app
-const app = express();
+const app = express(); //setup express app
+const server = http.Server(app); //set up server
+const io = socketio(server); //attach socket.io to server 
+//create application/json parser
+const jsonParser = bodyParser.json(); //declare JSON parser
 
 //lets you use the cookieParser in your application
 app.use(cookieParser());
-
 //form code decode midware
 app.use(express.urlencoded({
   extended: false
 }));
 
-//create application/json parser
-const jsonParser = bodyParser.json(); //declare JSON parser
+//app.use(express.static("public")); //serve our static assets from public
 
 //define the static folder for resource
 app.use(express.static('resources/'));
+
+
+//HANDLING CONNECTIONS +++++++++++++++++++++++++
+/*const connections = [null, null];
+
+// Handle a socket connection request from web client
+io.on('connection', function (socket) {
+  
+  // Find an available player number
+  let playerIndex = -1;
+  for (var i in connections) {
+    if (connections[i] === null) {
+      playerIndex = i;
+    }
+  }
+  
+  // Tell the connecting client what player number they are
+  socket.emit('player-number', playerIndex);
+  
+  // Ignore player 3
+  if (playerIndex == -1) return;
+  
+  connections[playerIndex] = socket;
+  
+  // Tell everyone else what player number just connected
+  socket.broadcast.emit('player-connect', playerIndex);
+});
+
+socket.on('actuate', function (data) {
+    const { grid, metadata } = data; // Get grid and metadata properties from client
+    
+    const move = {
+      playerIndex,
+      grid,
+      metadata,
+    };
+
+    // Emit the move to all other clients
+    socket.broadcast.emit('move', move);
+  });
+
+  socket.on('disconnect', function() {
+    console.log(`Player ${playerIndex} Disconnected`);
+    connections[playerIndex] = null;
+  });*/
+
 
 //DEFAULT PAGE +++++++++++++++++++++++++++++++++++
 //default page
