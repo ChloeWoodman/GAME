@@ -1,12 +1,12 @@
-Laika is a 3D web game developed by Chloe Woodman. It is an endless runner based game that can be controled via arrow keys and also left and right buttons to allow for mobile access. The game consists of a main page, start game page, login page, error 404 page and register page to allow for users to save their highest scores on their account.
+Laika is a 3D web game developed by Chloe Woodman. It is an endless runner based game that can be controlled via arrow keys and also left and right buttons to allow for mobile access. The game consists of a main page, start game page, login page, error 404 page and register page to allow for users to save their highest scores on their account.
 
 The aim of this endless runner is to run as long as you can, by collecting star dust (which will be added in later updates) for points and avoiding asteroids - this is based on the actual Laika that was sent to space by the soviet space program in 1957!
 
-  * Use your mouse to adjust the camera to view your     surroundings!
+  * Use your mouse to adjust the camera to view your surroundings!
   
   * Use left right buttons/arrow keys to control Laika 
   
-  * Interact with buttons to navigate around the       different web pages
+  * Interact with buttons to navigate around the different web pages
 
 Login uses XHR javascript call. It also demonstrate how to save data in a JSON file.(security/user.json). Everytime when a user submit data, the user name will be added in user.json file.
 
@@ -30,7 +30,7 @@ The folder structure:
 ---user.json stores user submit data in a JSON format. 
 
 
-Coding comventions used:
+Coding conventions used:
 * Simple statement ends in semicolon
 * Complex statement will not end in semicolon
 * Opening bracket at the end of first line
