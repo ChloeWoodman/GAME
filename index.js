@@ -131,7 +131,6 @@ app.post('/save', jsonParser, (req, res) => {
 
   if ((name == "user1") && (pass == 123)){
     console.log("correct user");
-    //res.redirect("/Score.html");
     return res.json(myJson);
 
   } else {

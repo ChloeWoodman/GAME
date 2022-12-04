@@ -8,7 +8,6 @@
   <link href="/css/style.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-  <form action="action_page.php" method="post">
     <div class="imgcontainer">
       <img src="https://www.pikpng.com/pngl/b/404-4041138_circle-group-icon-png-clipart.png" alt="Avatar"
         class="avatar">
@@ -16,12 +15,14 @@
 
     <p id="result"></p>
     <div class="container">
-      <label for="uname">Username:</label><br>
-      <input type="text" id="uname" name="uname" value="Enter username"><br>
-      <label for="psw">Password:</label><br>
-      <input type="text" id="psw" name="psw" value="Enter password"><br>
-      <label for="email">Email:</label><br>
-      <input type="text" id="email" name="email" value="Enter email"><br>
+      <label for="runame">Username:</label><br>
+      <input type="text" id="runame" name="runame" value="Enter username"><br>
+      
+      <label for="rpsw">Password:</label><br>
+      <input type="password" id="rpsw" name="rpsw" value="Enter password"><br>
+      <label for="confirmpsw">Confirm password:</label><br>
+      <input type="password" id="confirmpsw" name="confirmpsw" value="Confirm password"><br>
+      
       <button id="loginbtn">Submit</button>
       <label><input type="checkbox" checked="checked" name="remember"> Remember me</label>
     </div>

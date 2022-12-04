@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'https://unpkg.com/three@0.145.0/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'https://unpkg.com/three@0.145.0/examples/jsm/loaders/GLTFLoader.js';
-//import { OBB } from 'https://unpkg.com/three@0.145.0/examples/jsm/math/OBB.js';
 
 
 //VARIABLES ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -83,6 +82,21 @@ audioLoader.load('/audio/LaikaBGAudio.mp3', function(buffer) {
   sound.play();
 });
 
+
+const starSound = new THREE.Audio(listener);
+audioLoader.load('/audio/starget.mp3', function(buffer) {
+  starSound.setBuffer(buffer);
+  starSound.setLoop(false);
+  starSound.setVolume(.5);
+});
+
+const hurtSound = new THREE.Audio(listener);
+audioLoader.load('/audio/death2.mp3', function(buffer) {
+  hurtSound.setBuffer(buffer);
+  hurtSound.setLoop(false);
+  hurtSound.setVolume(.3);
+});
+
 //LIGHTING +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //ambient light
@@ -94,6 +108,7 @@ const directionalLight = new THREE.DirectionalLight(0xE6E6FA, 0.7);
 scene.add(directionalLight);
 const object = THREE.Object3D;
 let scene12 = new THREE.Object3D;
+
 
 //ADD POINTS INTO GAME +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -227,6 +242,7 @@ gltfLoader.load(
     scene12 = gltf.scene;
     scene.add(scene12);
   });
+
 //transparent geometry for Laika bounding box
 const geometry18 = new THREE.BoxGeometry( 2, 1.2, 3 );
 const material18 =  new THREE.MeshLambertMaterial({transparent: true, opacity: 0})
@@ -269,6 +285,7 @@ function checkCollisions() {
       healthName.innerHTML = health;
       circle.position.z = -40;
       circle.position.x = -10 + getRandomInt(20);
+      hurtSound.play();
     } else {
       circle.material.opacity = 1.0;
     }
@@ -278,6 +295,7 @@ function checkCollisions() {
       healthName.innerHTML = health;
       circle2.position.z = -40;
       circle2.position.x = -10 + getRandomInt(20);
+      hurtSound.play();
     } else {
       circle2.material.opacity = 1.0;
     }
@@ -287,22 +305,27 @@ function checkCollisions() {
       healthName.innerHTML = health;
       circle3.position.z = -40;
       circle3.position.x = -10 + getRandomInt(20);
+      hurtSound.play();
     } else {
       circle3.material.opacity = 1.0;
     }
     if (LaikaBB.intersectsBox(starBB1)) {
       score += 1;
       scoreName.innerHTML = score;
+      starSound.play();
       starGroup1.position.z = -17;
+      
     }
     if (LaikaBB.intersectsBox(starBB2)) {
       score += 1;
       scoreName.innerHTML = score;
+      starSound.play();
       starGroup2.position.z = -20;
     }
     if (LaikaBB.intersectsBox(starBB3)) {
       score += 1;
       scoreName.innerHTML = score;
+      starSound.play();
       starGroup3.position.z = -25;
     }
   }
@@ -388,12 +411,13 @@ const animate = function() {
     //x axis border
     if ((scene12.position.x)&&(tCube1.position.x) <= -10) {
       rightPressed = false;
-      rightstate = false;
+      leftstate = false;
+
       console.log("Reached right border");
     }
     else if ((scene12.position.x)&&(tCube1.position.x) >= 10) {
       leftPressed = false;
-      leftstate = false;
+      rightstate = false;
       console.log("Reached left border");
     }           
   }, 1000 / 60); 
@@ -441,12 +465,12 @@ const animate = function() {
 
     //add up state update animation
     if (leftstate) {
-      scene12.position.x += 0.05;
-      tCube1.position.x += 0.05;
+      scene12.position.x -= 0.1;
+      tCube1.position.x -= 0.1;
 
     } else if (rightstate) {
-      scene12.position.x -= 0.05;
-      tCube1.position.x -= 0.05;
+      scene12.position.x += 0.1;
+      tCube1.position.x += 0.1;
     }
     if (leftPressed) {
       scene12.position.x += 0.1;
@@ -520,8 +544,12 @@ const animate = function() {
 const keyDownHandler = (event) => {
   if (event.keyCode == 39) {
     leftPressed = true;
+    rightstate = false;
+    leftstate = false;
   } else if (event.keyCode == 37) {
-    rightPressed = true;
+    rightPressed = true
+    rightstate = false;
+    leftstate = false;
   }
 }
 
@@ -529,8 +557,12 @@ const keyDownHandler = (event) => {
 const keyUpHandler = (event) => {
   if (event.keyCode == 39) {
     leftPressed = false;
+    rightstate = false;
+    leftstate = false;
   } else if (event.keyCode == 37) {
     rightPressed = false;
+    rightstate = false;
+    leftstate = false;
   }
 }
 

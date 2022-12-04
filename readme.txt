@@ -46,3 +46,5 @@ galaxy.png is from https://www.pngall.com/galaxy-png/download/14481
 planet.png is from deviantart.com/dadrian/art/Red-and-blue-planet-stock-678128532
 XHR code, https://www.w3schools.com/xml/xml_http.asp, last updated at 29/11/2021
 laikascorebg is from:https://gfycat.com/gifs/search/laika+space+dog
+death2.mp3 comes from GFX Sounds https://www.youtube.com/watch?v=CJNkSwATa_4
+starget.mp3 comes from Gravity Sound https://www.youtube.com/watch?v=zCp7IdpOo90
