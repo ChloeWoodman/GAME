@@ -164,3 +164,28 @@ span.psw {
 label {
   font-size: 2rem;
 }
+
+/*#score {
+  position: absolute;
+  top: 10px;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  font-size: 200%;
+  z-index: 30;
+  color: purple;
+  margin: 4px -10px;
+}
+
+#health {
+  position: absolute;
+  top: 10px;
+  height: 100%;
+  width: 100%;
+  left: -5%;
+  text-align: right;
+  font-size: 200%;
+  z-index: 30;
+  color: blue;
+  margin: 4px 10px;
+}*/

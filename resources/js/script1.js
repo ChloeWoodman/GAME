@@ -273,16 +273,19 @@ const material4 = new THREE.PointsMaterial({ map: texture, color: 0x888888, size
 const points2 = new THREE.Points(geometry3, material4);
 scene.add(points2);
 
+//GAME START +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+var getScore = true;
+healthName.innerText = "Lives: " + health;
+scoreName.innerText = "Score: ";
 
 //COLLISIONS ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-var getScore = true;
 function checkCollisions() {
   if (getScore == true) {
     //intersecting TOUCHING test
     if (LaikaBB.intersectsBox(circle1BB)) {
       animation1();
       health -= 1;
-      healthName.innerHTML = health;
+      healthName.innerHTML = "Health: " + health;
       circle.position.z = -40;
       circle.position.x = -10 + getRandomInt(20);
       hurtSound.play();
@@ -292,7 +295,7 @@ function checkCollisions() {
       if (LaikaBB.intersectsBox(circle2BB)) {
       animation2();
       health -= 1;
-      healthName.innerHTML = health;
+      healthName.innerHTML = "Health: " + health;
       circle2.position.z = -40;
       circle2.position.x = -10 + getRandomInt(20);
       hurtSound.play();
@@ -302,7 +305,7 @@ function checkCollisions() {
     if (LaikaBB.intersectsBox(circle3BB)) {
       animation3();
       health -= 1;
-      healthName.innerHTML = health;
+      healthName.innerHTML = "Health: " + health;
       circle3.position.z = -40;
       circle3.position.x = -10 + getRandomInt(20);
       hurtSound.play();
@@ -311,20 +314,20 @@ function checkCollisions() {
     }
     if (LaikaBB.intersectsBox(starBB1)) {
       score += 1;
-      scoreName.innerHTML = score;
+      scoreName.innerHTML = "Score: " + score;
       starSound.play();
       starGroup1.position.z = -17;
       
     }
     if (LaikaBB.intersectsBox(starBB2)) {
       score += 1;
-      scoreName.innerHTML = score;
+      scoreName.innerHTML = "Score: " + score;
       starSound.play();
       starGroup2.position.z = -20;
     }
     if (LaikaBB.intersectsBox(starBB3)) {
       score += 1;
-      scoreName.innerHTML = score;
+      scoreName.innerHTML = "Score: " + score;
       starSound.play();
       starGroup3.position.z = -25;
     }
@@ -605,7 +608,7 @@ document.getElementById("rightbutton").addEventListener("click", moveright);
 //DIFFICULTY INCREASE ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 function increaseSpeed() {
-  if (score >= 5) {
+  if ((score >= 5)&&(score <= 100)) {
     diffcultySpeed += 0.0001;
   }
 }
