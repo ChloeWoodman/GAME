@@ -1,8 +1,8 @@
 const postUser=()=>{
   
   //encode data
-  let username = document.getElementById("uname").value;
-  let password = document.getElementById("psw").value;
+  let username = document.getElementById("runame").value;
+  let password = document.getElementById("rpsw").value;
   let formData = {name: username, pass: password};
 
   let postData = JSON.stringify(formData);
@@ -14,7 +14,7 @@ const postUser=()=>{
     xhr.send(postData);
 
     //decode response
-    xhr.onload = () => {
+    /*xhr.onload = () => {
       let result= xhr.response;
       console.log("Get response from express:"+ result); // Received text
       let resultObj = JSON.parse(result);
@@ -27,7 +27,7 @@ const postUser=()=>{
       
       }
       
-    }
+    }*/
 }
  
 

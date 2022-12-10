@@ -72,39 +72,6 @@ socket.on('actuate', function (data) {
 //default page
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
-  //cookies that have not been signed
-  console.log("Cookies: ", req.cookies);
-
-//COOKIES ++++++++++++++++++++++++++++++++++++++++
-  //cookies that have been signed
-  console.log("Signed Cookies: ", req.signedCookies)
-});
-
-//a get route for adding a cookie
-app.get('/setcookie', (req, res) => {
-    res.cookie(`Cookie token name`,`encrypted cookie string Value`,{
-        maxAge: 5000,
-        // expires works the same as the maxAge
-        expires: new Date('01 12 2023'),
-        secure: true,
-        httpOnly: true,
-        sameSite: 'lax'
-    });
-    res.send('Cookie have been saved successfully');
-});
-
-// get the cookie incoming request
-app.get('/getcookie', (req, res) => {
-    //show the saved cookies
-    console.log(req.cookies)
-    res.send(req.cookies);
-});
-
-// delete the saved cookie
-app.get('/deletecookie', (req, res) => {
-    //show the saved cookies
-    res.clearCookie()
-    res.send('Cookie has been deleted successfully');
 });
 
 //GAME PAGE +++++++++++++++++++++++++++++++++++++++
@@ -115,8 +82,8 @@ app.get('/game', (req, res) => {
 
 //LOGIN PAGE ++++++++++++++++++++++++++++++++++++++
 //Login page
-app.get('/login', (req, res) => {
-  res.sendFile(__dirname + '/Login.html');
+app.get('/register', (req, res) => {
+  res.sendFile(__dirname + '/register.html');
 });
 
 //submit handling RESTful API
@@ -178,7 +145,7 @@ app.post('/save', jsonParser, (req, res) => {
 
 });
 
-  if ((name == "user1") && (pass == 123)){
+  /*if ((name == "user1") && (pass == 123)){
     console.log("correct user");
     return res.json(myJson);
 
@@ -186,13 +153,13 @@ app.post('/save', jsonParser, (req, res) => {
     //get the receieved JSON string
     myJson = { error: true, data: "Wrong user name" };
     return res.json(myJson);
-  }
+  }*/
 });
 
 //REGISTER PAGE ++++++++++++++++++++++++++++++++++
 //register page
-app.get('/register', (req, res) => {
-  res.sendFile(__dirname + '/register.html');
+app.get('/login', (req, res) => {
+  res.sendFile(__dirname + '/Login.html');
 });
 
 //SCORE PAGE ++++++++++++++++++++++++++++++++++++++++
