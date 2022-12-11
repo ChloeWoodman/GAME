@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const socketio = require('socket.io');
 const http = require('http');
+const bcrypt = require('bcrypt'); //encrypting password
 
 const app = express(); //setup express app
 const server = http.Server(app); //set up server
@@ -80,21 +81,23 @@ app.get('/game', (req, res) => {
   res.sendFile(__dirname + '/script1.html');
 });
 
-//LOGIN PAGE ++++++++++++++++++++++++++++++++++++++
-//Login page
-app.get('/register', (req, res) => {
+//REGISTER PAGE ++++++++++++++++++++++++++++++++++++++
+//Register page
+app.get('/register', async (req, res) => {
   res.sendFile(__dirname + '/register.html');
 });
 
 //submit handling RESTful API
 const fs = require("fs");
 
-app.post('/save', jsonParser, (req, res) => {
+app.post('/save', jsonParser, async (req, res) => {
   let name = req.body.name;
   let pass = req.body.pass;
   console.log("Input username and password = " + name + 
  pass);
-  let myJson = { error: false, data: name + pass };
+  //hashedPassword uses hash and salt from bcrypt to encrypt password (user data) for security on server side
+  const hashedPassword = await bcrypt.hash(req.body.pass, 10) 
+  let myJson = { error: false, data: name + hashedPassword };
   
   let newJson; //create new input JSON
 
@@ -103,16 +106,14 @@ app.post('/save', jsonParser, (req, res) => {
     console.log("Error reading file from disk:", err);
     return;
   }
-  try {
-    
+  try { 
     newJson = JSON.parse(jsonString);
     console.log("Old JSON is:", jsonString); 
     console.log("Old JSON obj is ", newJson[0]);
-
-
+    
     if(newJson == null){
       console.log("JSON file is empty");
-          let newUser = [{username:name},{password:pass}];
+          let newUser = [{username:name},{password:hashedPassword}];
 
           //jsonString = 
           fs.writeFile('./security/user.json', JSON.stringify(newUser), err => {
@@ -122,12 +123,12 @@ app.post('/save', jsonParser, (req, res) => {
             console.log('Successfully wrote file')
         }
     })
-  
-
     }else{
-      //if has array items already 
-      let newUser = [{username:name},{password:pass}];
-      newJson.push(newUser);
+        //if has array items already 
+         //const hashedPassword = await bcrypt.hash(req.body.pass, 10)
+          let newUser = [{username:name},{password:hashedPassword}];
+        newJson.push(newUser);
+     }
        fs.writeFile('./security/user.json', JSON.stringify(newJson), err => {
         if (err) {
             console.log('Error writing file', err)
@@ -135,15 +136,11 @@ app.post('/save', jsonParser, (req, res) => {
             console.log('Successfully wrote file')
         }
     })
-
-    }
-
-
   } catch (err) {
     console.log("Error parsing JSON string:", err);
   }
 
-});
+  });
 
   /*if ((name == "user1") && (pass == 123)){
     console.log("correct user");
@@ -156,10 +153,40 @@ app.post('/save', jsonParser, (req, res) => {
   }*/
 });
 
-//REGISTER PAGE ++++++++++++++++++++++++++++++++++
-//register page
-app.get('/login', (req, res) => {
+//LOGIN PAGE ++++++++++++++++++++++++++++++++++
+//login page
+app.get('/login', async (req, res) => {
   res.sendFile(__dirname + '/Login.html');
+});
+
+app.post('/log_in', jsonParser, async (req, res) => {
+
+    //submit handling RESTful API
+  const fs2 = require("fs");
+  
+  fs2.readFile("./security/user.json", "utf8", (err, jsonString) => {
+  if (err) {
+    console.log("Error reading file from disk:", err);
+     return;
+  }else {
+      console.log("Read from file");
+    }
+  });
+    
+  const user = users.find(user => user.username == req.body.name)
+  if (user == null) {
+    console.log("Cannot find user");
+  }
+    //using bcrypt compare as will hash the inputted value and compare agaisnt actual hashed password 
+  if (await bcrypt.compare(req.body.pass, user.password)) {
+    console.log("Yes");
+    return res.json(myJson);
+  } else {
+    console.log("Not allowed");
+    myJson = { error: true, data: "Wrong username or password" };
+    return res.json(myJson);
+  }
+    
 });
 
 //SCORE PAGE ++++++++++++++++++++++++++++++++++++++++
