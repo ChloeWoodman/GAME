@@ -48,3 +48,7 @@ XHR code, https://www.w3schools.com/xml/xml_http.asp, last updated at 29/11/2021
 laikascorebg is from:https://gfycat.com/gifs/search/laika+space+dog
 death2.mp3 comes from GFX Sounds https://www.youtube.com/watch?v=CJNkSwATa_4
 starget.mp3 comes from Gravity Sound https://www.youtube.com/watch?v=zCp7IdpOo90
+css style code for button : https://getcssscan.com/css-buttons-examples [button63]
+css style code for left+right button : https://getcssscan.com/css-buttons-examples [button83]
+css style code for retry button : https://getcssscan.com/css-buttons-examples [button73]
+Game over title css code: https://codepen.io/alvarotrigo/pen/PoKMyNO

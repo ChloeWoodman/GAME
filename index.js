@@ -125,7 +125,6 @@ app.post('/save', jsonParser, async (req, res) => {
     })
     }else{
         //if has array items already 
-         //const hashedPassword = await bcrypt.hash(req.body.pass, 10)
           let newUser = [{username:name},{password:hashedPassword}];
         newJson.push(newUser);
      }
@@ -155,14 +154,14 @@ app.post('/save', jsonParser, async (req, res) => {
 
 //LOGIN PAGE ++++++++++++++++++++++++++++++++++
 //login page
-app.get('/login', async (req, res) => {
+app.get('/login', jsonParser, async (req, res) => {
   res.sendFile(__dirname + '/Login.html');
 });
 
-app.post('/log_in', jsonParser, async (req, res) => {
+const fs2 = require("fs");
 
-    //submit handling RESTful API
-  const fs2 = require("fs");
+app.post('/post', jsonParser, async (req, res) => {
+
   
   fs2.readFile("./security/user.json", "utf8", (err, jsonString) => {
   if (err) {
@@ -188,6 +187,7 @@ app.post('/log_in', jsonParser, async (req, res) => {
   }
     
 });
+
 
 //SCORE PAGE ++++++++++++++++++++++++++++++++++++++++
 app.get('/score', (req, res) => {

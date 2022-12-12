@@ -1,4 +1,4 @@
-const postUser=()=>{
+const postUser2=()=>{
 
   //encode data
   let username = document.getElementById("uname").value;
@@ -9,7 +9,7 @@ const postUser=()=>{
 
   //data
   let xhr = new XMLHttpRequest();
-  xhr.open("POST", "/log_in", true);
+  xhr.open("POST", "/post", true);
   xhr.setRequestHeader('Content-type', 'application/json')
   
   //decode response
@@ -27,4 +27,4 @@ const postUser=()=>{
 }
  //set events 
  const form = document.querySelector("#loginbtn");
- form.addEventListener('click', postUser);
+ form.addEventListener('click', postUser2);

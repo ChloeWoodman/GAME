@@ -10,13 +10,21 @@ let leftstate = false; //variable for leftstate for left button movement
 let rightstate = false; //variable for rightstate for right button movement
 let leftPressed = false; //arrow controls left
 let rightPressed = false; //arrow controls right
-var score = 1;
+var score = 0;
 var scoreName = document.getElementById("score");
 var health = 3;
 var healthName = document.getElementById("health")
-//let hurt = false;
-//let healthTimer = 0;
-var diffcultySpeed = 0.06;
+var getScore = false;
+var canMove = false;
+var diffcultySpeed = 0;
+
+var startButton = document.getElementById('startButton');
+var instructions = document.getElementById("instructions");
+var retryButton = document.getElementById('retryButton');
+retryButton.style.opacity = '0';
+retryButton.style.display = 'none';
+
+
 
 //NEW SCENE ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -274,9 +282,43 @@ const points2 = new THREE.Points(geometry3, material4);
 scene.add(points2);
 
 //GAME START +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-var getScore = true;
-healthName.innerText = "Lives: " + health;
-scoreName.innerText = "Score: ";
+startButton.onclick = function StartAnimation()
+{
+  startGame();
+  startButton.style.opacity = '0';
+  startButton.style.display = 'none';
+  instructions.innerText = "";
+  getScore = true;
+  diffcultySpeed = 0.06;
+  healthName.innerText = "";
+  scoreName.innerText = "";
+  var score = 0;
+  var health = 3;
+  healthName.innerText = "Lives: " + health;
+  scoreName.innerText = "Score: ";
+}
+
+function startGame(){
+  var score = 0;
+  var health = 3;
+  healthName.innerText = "Lives: " + health;
+  scoreName.innerText = "Score: ";
+  getScore = true;
+  canMove = true;
+  circle.position.set(0, 0, -17);
+  circle2.position.set(5, 0, -25);
+  circle3.position.set(-5, 0, -35);
+  mesh12.position.set(0, 0, -10);
+  mesh13.position.set(0, 0, -10);
+  stardust1.position.set(-5, 0, -17);
+  mstardust1.position.set(-4, 1, -17);
+  stardust2.position.set(0, 0, -20);
+  mstardust2.position.set(-1, -1, -20);
+  stardust3.position.set(5, 0, -25);
+  mstardust3.position.set(6, 1, -25);
+  scene12.position.set(0,0,0);
+  diffcultySpeed = 0;
+}
 
 //COLLISIONS ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 function checkCollisions() {
@@ -456,8 +498,8 @@ const animate = function() {
     starGroup3.position.z += diffcultySpeed;
 
     //brings rings forward
-    mesh12.position.z += 0.1;
-    mesh13.position.z += 0.1;
+    mesh12.position.z += diffcultySpeed;
+    mesh13.position.z += diffcultySpeed;
 
     //makes rocket model positioned
     scene12.rotation.x = 1;
@@ -467,18 +509,18 @@ const animate = function() {
     
 
     //add up state update animation
-    if (leftstate) {
+    if ((leftstate)&&(canMove == true)) {
       scene12.position.x -= 0.1;
       tCube1.position.x -= 0.1;
 
-    } else if (rightstate) {
+    } else if ((rightstate)&&(canMove == true)) {
       scene12.position.x += 0.1;
       tCube1.position.x += 0.1;
     }
-    if (leftPressed) {
+    if ((leftPressed)&&(canMove == true)) {
       scene12.position.x += 0.1;
       tCube1.position.x += 0.1;
-    } else if (rightPressed) {
+    } else if ((rightPressed)&&(canMove == true)) {
       scene12.position.x -= 0.1;
       tCube1.position.x -= 0.1;
     }
@@ -545,11 +587,11 @@ const animate = function() {
 
 //arrow controls
 const keyDownHandler = (event) => {
-  if (event.keyCode == 39) {
+  if ((event.keyCode == 39)&&(canMove == true)) {
     leftPressed = true;
     rightstate = false;
     leftstate = false;
-  } else if (event.keyCode == 37) {
+  } else if ((event.keyCode == 37)&&(canMove == true)) {
     rightPressed = true
     rightstate = false;
     leftstate = false;
@@ -605,6 +647,7 @@ const moveright = () => {
 document.getElementById("leftbutton").addEventListener("click", moveleft);
 document.getElementById("rightbutton").addEventListener("click", moveright);
 
+
 //DIFFICULTY INCREASE ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 function increaseSpeed() {
@@ -627,6 +670,9 @@ function gameOver() {
     gameOverScore.innerText = "Good job! Your score was " + score;
     healthName.innerText = "";
     scoreName.innerText = "";
+    canMove = false;
+    retryButton.style.opacity = '1';
+    retryButton.style.display = 'block';
   }
 }
 
