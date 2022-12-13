@@ -3,6 +3,7 @@ const postUser=()=>{
   //encode data
   let username = document.getElementById("runame").value;
   let password = document.getElementById("rpsw").value;
+
   let formData = {name: username, pass: password};
 
   let postData = JSON.stringify(formData);

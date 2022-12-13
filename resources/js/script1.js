@@ -141,7 +141,7 @@ for (let i = 0; i < 1000; i++) {
 const geometry = new THREE.SphereGeometry();
 const material = new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load("/textures/asteroidtexture.png") });
 const circle = new THREE.Mesh(geometry, material);
-circle.position.set(0, 0, -17);
+circle.position.set(0, 0, -40);
 scene.add(circle);
 
 //bounding sbox asteroid 1
@@ -290,22 +290,20 @@ startButton.onclick = function StartAnimation()
   instructions.innerText = "";
   getScore = true;
   diffcultySpeed = 0.06;
-  healthName.innerText = "";
-  scoreName.innerText = "";
   var score = 0;
   var health = 3;
-  healthName.innerText = "Lives: " + health;
-  scoreName.innerText = "Score: ";
+  healthName.innerText = "Health: " + health;
+  scoreName.innerText = "Score: " + score;
 }
 
 function startGame(){
   var score = 0;
   var health = 3;
   healthName.innerText = "Lives: " + health;
-  scoreName.innerText = "Score: ";
+  scoreName.innerText = "Score: " + score;
   getScore = true;
   canMove = true;
-  circle.position.set(0, 0, -17);
+  circle.position.set(0, 0, -40);
   circle2.position.set(5, 0, -25);
   circle3.position.set(-5, 0, -35);
   mesh12.position.set(0, 0, -10);
@@ -457,7 +455,6 @@ const animate = function() {
     if ((scene12.position.x)&&(tCube1.position.x) <= -10) {
       rightPressed = false;
       leftstate = false;
-
       console.log("Reached right border");
     }
     else if ((scene12.position.x)&&(tCube1.position.x) >= 10) {

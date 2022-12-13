@@ -51,4 +51,5 @@ starget.mp3 comes from Gravity Sound https://www.youtube.com/watch?v=zCp7IdpOo90
 css style code for button : https://getcssscan.com/css-buttons-examples [button63]
 css style code for left+right button : https://getcssscan.com/css-buttons-examples [button83]
 css style code for retry button : https://getcssscan.com/css-buttons-examples [button73]
+css style code for start button : https://getcssscan.com/css-buttons-examples [button53]
 Game over title css code: https://codepen.io/alvarotrigo/pen/PoKMyNO
