@@ -10,19 +10,24 @@ let leftstate = false; //variable for leftstate for left button movement
 let rightstate = false; //variable for rightstate for right button movement
 let leftPressed = false; //arrow controls left
 let rightPressed = false; //arrow controls right
-var score = 0;
-var scoreName = document.getElementById("score");
+let score = 0;
+let scoreName = document.getElementById("score");
 var health = 3;
 var healthName = document.getElementById("health")
 var getScore = false;
 var canMove = false;
 var diffcultySpeed = 0;
 
+var scoresave = document.getElementById("scoresave");
+scoresave.value = "Enter username to save high score";
 var startButton = document.getElementById('startButton');
 var instructions = document.getElementById("instructions");
 var retryButton = document.getElementById('retryButton');
 retryButton.style.opacity = '0';
 retryButton.style.display = 'none';
+var button = document.getElementById("scorebutton");
+button.style.opacity = '0';
+button.style.display = 'none';
 
 
 
@@ -452,16 +457,9 @@ const animate = function() {
     camera.position.z = scene12.position.z + 6;
 
     //x axis border
-    if ((scene12.position.x)&&(tCube1.position.x) <= -10) {
-      rightPressed = false;
-      leftstate = false;
-      console.log("Reached right border");
-    }
-    else if ((scene12.position.x)&&(tCube1.position.x) >= 10) {
-      leftPressed = false;
-      rightstate = false;
-      console.log("Reached left border");
-    }           
+    scene12.position.x = Math.max(-10, Math.min(10, scene12.position.x));
+    tCube1.position.x = Math.max(-10, Math.min(10, tCube1.position.x));
+
   }, 1000 / 60); 
   // ^ 60 fps frame rate, 1 second = 1000 milliseconds, / 60 so 60 frames in 1000 milliseconds 
 
@@ -657,7 +655,6 @@ function increaseSpeed() {
 //GAME OVER ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 var gameOverTitle = document.getElementById("gameOverTitle");
 var gameOverSummary = document.getElementById("gameOverScore");
-
 function gameOver() {
   if (health <= 0)
   {
@@ -668,10 +665,49 @@ function gameOver() {
     healthName.innerText = "";
     scoreName.innerText = "";
     canMove = false;
+    scoresave.style.display = 'block';
+    button.style.opacity = '1';
+    button.style.opacity = 'block';
+    button.style.display = 'flex';
     retryButton.style.opacity = '1';
     retryButton.style.display = 'block';
   }
 }
+
+//SAVING USER SCORE ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+  const updateHighScore = () => {
+    //encode data
+  let username = document.getElementById("scoresave").value;
+  let formData = {name: username, highscore: score};
+
+  
+  let postData = JSON.stringify(formData);
+  let xhr = new XMLHttpRequest();
+  
+  xhr.open("POST", "/score", true);
+  xhr.setRequestHeader('Content-type', 'application/json')
+  xhr.send(postData);
+  
+  //decode response
+  xhr.onload = () => {
+    //get server response
+    let result = xhr.response;
+    console.log("Get response from express:"+ result); // Received text
+    let resultObj = JSON.parse(result);
+    
+    if (resultObj.error) {
+      //set contents of an HTML element to server's response
+      //document.querySelector("#result").innerHTML = "Wrong user name or score not highest score, Please try again";
+      alert("Wrong username/score not highest score, please try again!");
+  } else {
+      alert("High score saved!");
+    }
+  }
+}
+ const form = document.querySelector("#scorebutton");
+ form.addEventListener('click', updateHighScore);
 
 //ORBIT CONTROL +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

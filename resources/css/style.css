@@ -12,9 +12,11 @@ html, body {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 100%;
+  width: 200%;
   height: 100%;
   background-color: slateblue;
+  background-image: url("/textures/laikarocket_loader.gif");
+  background-size: cover;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -107,6 +109,19 @@ label {
   z-index: 30;
   color: red;
   margin: 4px 10px;
+}
+
+#scoresave {
+  position: relative;
+  z-index: 30;
+  display: none;
+}
+
+#scorebutton {
+  position: absolute;
+  z-index: 30;
+  text-align: center;
+  left: 45%;
 }
 
 /* button */
@@ -517,8 +532,8 @@ span.psw {
 
 #retryButton {
   position: absolute;
-  top: 100px;
-  right: 50%;
+  top: 120px;
+  right: 55%;
   text-align: center;
   height: 12%;
   appearance: none;

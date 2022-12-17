@@ -13,9 +13,16 @@ const postUser=()=>{
     xhr.open("POST", "/save", true);
     xhr.setRequestHeader('Content-type', 'application/json')
     xhr.send(postData);
-
+    xhr.addEventListener("load", function() {
+    let result = JSON.parse(xhr.responseText);
+    if (result.error) {
+      //set contents of an HTML element to server's response
+      document.querySelector("#result").innerHTML = "Username already exists. Please try again";
+    } else {
+      alert("Registered account!");
+    }
+  });
 }
- 
 
  //set events 
  const form = document.querySelector("#loginbtn");

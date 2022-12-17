@@ -44,6 +44,7 @@ REFERENCES:
 earthgif.gif for html main page is from NASA
 galaxy.png is from https://www.pngall.com/galaxy-png/download/14481
 planet.png is from deviantart.com/dadrian/art/Red-and-blue-planet-stock-678128532
+scoreicon is from https://www.pngkey.com/maxpic/u2e6w7i1e6o0w7o0/
 XHR code, https://www.w3schools.com/xml/xml_http.asp, last updated at 29/11/2021
 laikascorebg is from:https://gfycat.com/gifs/search/laika+space+dog
 death2.mp3 comes from GFX Sounds https://www.youtube.com/watch?v=CJNkSwATa_4
