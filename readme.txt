@@ -2,18 +2,15 @@ Laika is a 3D web game developed by Chloe Woodman. It is an endless runner based
 
 The aim of this endless runner is to run as long as you can, by collecting star dust (which will be added in later updates) for points and avoiding asteroids - this is based on the actual Laika that was sent to space by the soviet space program in 1957!
 
-  * Use your mouse to adjust the camera to view your surroundings!
   
   * Use left right buttons/arrow keys to control Laika 
   
   * Interact with buttons to navigate around the different web pages
 
-Login uses XHR javascript call. It also demonstrate how to save data in a JSON file.(security/user.json). Everytime when a user submit data, the user name will be added in user.json file.
+Login uses XHR javascript call. It also demonstrate how to save data in a JSON file.(security/user.json). Everytime when a user submit data, the user name will be added in user.json file, which can be accessed and read for login and read and updated for user score.
 
 Secure HTTPS file
 
-USERNAME : user1
-PASSWORD: 123
 
 The folder structure:
 -index.js server page
