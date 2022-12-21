@@ -92,7 +92,6 @@ audioLoader.load('/audio/LaikaBGAudio.mp3', function(buffer) {
   sound.setBuffer(buffer);
   sound.setLoop(true);
   sound.setVolume(0.01);
-  sound.play();
 });
 
 
@@ -321,6 +320,7 @@ function startGame(){
   mstardust3.position.set(6, 1, -25);
   scene12.position.set(0,0,0);
   diffcultySpeed = 0;
+  sound.play();
 }
 
 //COLLISIONS ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -387,19 +387,19 @@ function checkCollisions() {
 function animation1(){
   circle.material.transparent = true;
   circle.material.opacity = 0.5;
-  circle.material.color = new THREE.Color(Math.random() * 0xffffff)
+  //circle.material.color = new THREE.Color(Math.random() * 0xffffff)
 }
 
 function animation2(){
   circle2.material.transparent = true;
   circle2.material.opacity = 0.5;
-  circle2.material.color = new THREE.Color(Math.random() * 0xffffff)
+  //circle2.material.color = new THREE.Color(Math.random() * 0xffffff)
 }
 
 function animation3(){
   circle3.material.transparent = true;
   circle3.material.opacity = 0.5;
-  circle3.material.color = new THREE.Color(Math.random() * 0xffffff)
+  //circle3.material.color = new THREE.Color(Math.random() * 0xffffff)
 }
     
 
@@ -646,7 +646,7 @@ document.getElementById("rightbutton").addEventListener("click", moveright);
 //DIFFICULTY INCREASE ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 function increaseSpeed() {
-  if ((score >= 5)&&(score <= 100)) {
+  if ((score >= 5)&&(score <= 70)) {
     diffcultySpeed += 0.0001;
   }
 }
@@ -671,6 +671,7 @@ function gameOver() {
     button.style.display = 'flex';
     retryButton.style.opacity = '1';
     retryButton.style.display = 'block';
+    sound.stop();
   }
 }
 

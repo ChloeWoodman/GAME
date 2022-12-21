@@ -1,72 +1,25 @@
 const express = require('express');
 const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
-const socketio = require('socket.io');
+//const cookieParser = require("cookie-parser");
+//const socketio = require('socket.io');
 const http = require('http');
 const bcrypt = require('bcrypt'); //encrypting password
 
 const app = express(); //setup express app
 const server = http.Server(app); //set up server
-const io = socketio(server); //attach socket.io to server 
+//const io = socketio(server); //attach socket.io to server 
 //create application/json parser
 const jsonParser = bodyParser.json(); //declare JSON parser
 
-//lets you use the cookieParser in your application
-app.use(cookieParser());
+
 //form code decode midware
 app.use(express.urlencoded({
   extended: false
 }));
 
-//app.use(express.static("public")); //serve our static assets from public
 
 //define the static folder for resource
 app.use(express.static('resources/'));
-
-
-//HANDLING CONNECTIONS +++++++++++++++++++++++++
-/*const connections = [null, null];
-
-// Handle a socket connection request from web client
-io.on('connection', function (socket) {
-  
-  // Find an available player number
-  let playerIndex = -1;
-  for (var i in connections) {
-    if (connections[i] === null) {
-      playerIndex = i;
-    }
-  }
-  
-  // Tell the connecting client what player number they are
-  socket.emit('player-number', playerIndex);
-  
-  // Ignore player 3
-  if (playerIndex == -1) return;
-  
-  connections[playerIndex] = socket;
-  
-  // Tell everyone else what player number just connected
-  socket.broadcast.emit('player-connect', playerIndex);
-});
-
-socket.on('actuate', function (data) {
-    const { grid, metadata } = data; // Get grid and metadata properties from client
-    
-    const move = {
-      playerIndex,
-      grid,
-      metadata,
-    };
-
-    // Emit the move to all other clients
-    socket.broadcast.emit('move', move);
-  });
-
-  socket.on('disconnect', function() {
-    console.log(`Player ${playerIndex} Disconnected`);
-    connections[playerIndex] = null;
-  });*/
 
 
 //DEFAULT PAGE +++++++++++++++++++++++++++++++++++
@@ -98,7 +51,7 @@ app.post('/score', jsonParser, async (req, res) => {
   let found = false;
 
   //check score
-  let found2 = false;
+  //let found2 = false;
 
   // Loop over the array of objects in the data variable
   for (let i = 0; i < data.length; i++) {
@@ -150,10 +103,8 @@ const fs = require("fs");
 
 app.post('/save', jsonParser, async (req, res) => {
   let name = req.body.name;
-  let pass = req.body.pass;
-  console.log("Input username and password = " + name + pass);
-  //hashedPassword uses hash and salt from bcrypt to encrypt password (user data) for security on server side
-  //const hashedPassword = await bcrypt.hash(req.body.pass, 10) 
+  // Hash the password using bcrypt
+  let hashedPassword = await bcrypt.hash(req.body.pass, 10); 
 
   fs.readFile("./security/user.json", "utf8", (err, jsonString) => {
     if (err) {
@@ -176,7 +127,7 @@ app.post('/save', jsonParser, async (req, res) => {
       // If a user with the same username does not already exist, add the new user
       let newUser = {
         username: name, 
-        password: pass,
+        password: hashedPassword,
         highscore: 0
       };
       newJson.push(newUser);
@@ -184,16 +135,19 @@ app.post('/save', jsonParser, async (req, res) => {
       // Write the updated array back to the JSON file
       fs.writeFile('./security/user.json', JSON.stringify(newJson), err => {
         if (err) {
-          console.log('Error writing file', err)
+          console.log('Error writing file', err);
         } else {
-          console.log('Successfully wrote file')
+          console.log("Successfully wrote file");
         }
       });
-    } catch (err) {
+
+      res.send({ error:false, data:"Success"})
+    } catch(err) {
       console.log("Error parsing JSON string:", err);
     }
   });
 });
+
 
 
 //LOGIN PAGE ++++++++++++++++++++++++++++++++++
@@ -203,7 +157,6 @@ app.get('/login', jsonParser, async (req, res) => {
 });
 
 app.post('/auth', jsonParser, async (req, res) => {
-
   let name2 = req.body.name;
   let password = req.body.password;
 
@@ -222,25 +175,28 @@ app.post('/auth', jsonParser, async (req, res) => {
   
   // Loop over the array of objects in the data variable
   let myJson;
-
   for (let i = 0; i < data.length; i++) {
-  // Check if the username and password match any of the objects in the data array
-  if (data[i].username == name2 && data[i].password == password) {
-    // If a match is found, set the response to a success message
-    console.log("correct user");
-    myJson = {error:false, data:"User authenticated successfully", highscore: data[i].highscore};
-    break;
+    // Check if the username and password match any of the objects in the data array
+    if (data[i].username == name2) {
+      // Compare the entered password with the hashed password stored in the JSON file
+      let passwordMatch = await bcrypt.compare(password, data[i].password);
+      if (passwordMatch) {
+        // If a match is found, set the response to a success message
+        console.log("correct user");
+        myJson = {error:false, data:"User authenticated successfully", highscore: data[i].highscore};
+        break;
+      }
+    }
   }
-}
 
-// If no match was found, set the response to an error message
-if (myJson === undefined) {
-  console.log("Incorrect user");
-  myJson = {error:true, data:"Wrong user name"};
-}
+  // If no match was found, set the response to an error message
+  if (myJson === undefined) {
+    console.log("Incorrect user");
+    myJson = {error:true, data:"Wrong user name or password"};
+  }
 
-// Send the response
-res.send(myJson);
+  // Send the response
+  res.send(myJson);
 });
 
 
