@@ -122,23 +122,6 @@ const object = THREE.Object3D;
 let scene12 = new THREE.Object3D;
 
 
-//ADD POINTS INTO GAME +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-//add points
-const vertices = [];
-
-for (let i = 0; i < 1000; i++) {
-
-  //distance between each point
-  const x = THREE.MathUtils.randFloatSpread(1000);
-  const y = THREE.MathUtils.randFloatSpread(1000);
-  const z = THREE.MathUtils.randFloatSpread(1000);
-
-  vertices.push(x, y, z);
-
-}
-
-
 //GEOMETRYS ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //first geometry - circle asteroid
@@ -266,6 +249,21 @@ scene.add( tCube1 );
 let LaikaBB = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
 LaikaBB.setFromObject( tCube1 );
 
+//ADD POINTS INTO GAME USING PARTICALS +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+//add points
+const vertices = [];
+
+for (let i = 0; i < 1000; i++) {
+
+  //distance between each point
+  const x = THREE.MathUtils.randFloatSpread(1000);
+  const y = THREE.MathUtils.randFloatSpread(1000);
+  const z = THREE.MathUtils.randFloatSpread(1000);
+
+  vertices.push(x, y, z);
+
+}
 
 //point geometry
 const geometry3 = new THREE.BufferGeometry();
@@ -643,14 +641,13 @@ document.getElementById("leftbutton").addEventListener("click", moveleft);
 document.getElementById("rightbutton").addEventListener("click", moveright);
 
 
-//DIFFICULTY INCREASE ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//DIFFICULTY INCREASE ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 function increaseSpeed() {
   if ((score >= 5)&&(score <= 70)) {
     diffcultySpeed += 0.0001;
   }
 }
-
 
 //GAME OVER ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 var gameOverTitle = document.getElementById("gameOverTitle");
