@@ -697,7 +697,6 @@ function gameOver() {
     
     if (resultObj.error) {
       //set contents of an HTML element to server's response
-      //document.querySelector("#result").innerHTML = "Wrong user name or score not highest score, Please try again";
       alert("Wrong username/score not highest score, please try again!");
   } else {
       alert("High score saved!");

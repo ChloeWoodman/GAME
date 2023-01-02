@@ -51,3 +51,5 @@ css style code for left+right button : https://getcssscan.com/css-buttons-exampl
 css style code for retry button : https://getcssscan.com/css-buttons-examples [button73]
 css style code for start button : https://getcssscan.com/css-buttons-examples [button53]
 Game over title css code: https://codepen.io/alvarotrigo/pen/PoKMyNO
+Loading screen javascript code: https://www.youtube.com/watch?v=zMzuPIiznQ4&t=267s&ab_channel=WaelYasmina
+Collision code: https://www.youtube.com/watch?v=9H3HPq-BTMo&t=521s&ab_channel=flanniganable
