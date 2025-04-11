@@ -4,6 +4,8 @@
   "description": "Laika is a 3D web game developed by Chloe Woodman. It is an endless runner based game that can be controlled via arrow keys and also left and right buttons to allow for mobile access. The game consists of a main page, start game page, login page, error 404 page and register page to allow for users to save their highest scores on their account.",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
