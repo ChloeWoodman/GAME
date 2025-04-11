@@ -15,7 +15,7 @@ html, body {
   width: 200%;
   height: 100%;
   background-color: slateblue;
-  background-image: url("/textures/laikarocket_loader.gif");
+  background-image: url("textures/laikarocket_loader.gif");
   background-size: cover;
   display: flex;
   flex-direction: column;
@@ -434,6 +434,13 @@ input[type=text], input[type=email] {
 img.avatar {
   width: 40%;
   border-radius: 50%;
+}
+
+/* For larger screens (PC) */
+@media (min-width: 1024px) {
+  img.avatar {
+    width: 20%; /* Adjust the size for larger screens */
+  }
 }
 
 /* Add padding to containers */
