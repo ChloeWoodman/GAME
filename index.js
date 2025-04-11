@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 //const cookieParser = require("cookie-parser");
 //const socketio = require('socket.io');
 const http = require('http');
-const bcrypt = require('bcrypt'); //encrypting password
+const bcrypt = require('bcryptjs'); //encrypting password
 
 const app = express(); //setup express app
 const server = http.Server(app); //set up server
